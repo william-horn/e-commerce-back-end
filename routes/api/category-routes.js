@@ -1,24 +1,25 @@
 
 const router = require('express').Router();
-const { Product, Category, Tag } = require('../../models');
+const { Category } = require('../../models');
 const createQuerier = require('../../utils/createQuerier');
 
-const querier = createQuerier(Product, 'Product', [Category, Tag]);
+const querier = createQuerier(Category, 'Category');
+querier.definePlurals({ Category: 'Categories' });
 
 const { 
-    getProduct, 
-    getAllProducts,
-    createProduct,
-    updateProduct,
-    deleteProduct
+    getCategory, 
+    getAllCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory
 } = querier.init();
 
 // traverse all categories
 const root_GET = async (req, res) => {
     try {
 
-        const productData = await getAllProducts();
-        res.status(200).json(productData);
+        const categoryData = await getAllCategories();
+        res.status(200).json(categoryData);
 
     } catch (err) {
 
@@ -28,12 +29,12 @@ const root_GET = async (req, res) => {
     }
 }
 
-// create new product
+// create new Category
 const root_POST = async (req, res) => {
     try {
 
-        const productData = await createProduct(req.body);
-        res.status(200).json(productData);
+        const categoryData = await createCategory(req.body);
+        res.status(200).json(categoryData);
 
     } catch (err) {
 
@@ -43,13 +44,13 @@ const root_POST = async (req, res) => {
     }
 }
 
-// get product by id
+// get Category by id
 const rootID_GET = async (req, res) => {
-    // find one product by its `id` value
+    // find one Category by its `id` value
     try {
 
-        const productData = await getProduct(req.params.id);
-        res.status(200).json(productData);
+        const categoryData = await getCategory(req.params.id);
+        res.status(200).json(categoryData);
 
     } catch (err) {
 
@@ -59,12 +60,12 @@ const rootID_GET = async (req, res) => {
     }
 }
 
-// update product by id
+// update Category by id
 const rootID_PUT = async (req, res) => {
     try {
 
-        const productData = await updateProduct(req.params.id, req.body);
-        res.status(200).json(productData);
+        const categoryData = await updateCategory(req.params.id, req.body);
+        res.status(200).json(categoryData);
 
     } catch (err) {
 
@@ -74,11 +75,11 @@ const rootID_PUT = async (req, res) => {
     }
 }
 
-// delete product by id
+// delete Category by id
 const rootID_DELETE = async (req, res) => {
     try {
 
-        const response = await deleteProduct(req.params.id);
+        const response = await deleteCategory(req.params.id);
         res.status(200).json(response);
 
     } catch (err) {
@@ -89,13 +90,13 @@ const rootID_DELETE = async (req, res) => {
     }
 }
 
-// for all 'root/api/products' routes
+// for all 'root/api/categories' routes
 router
     .route('/')
     .get(root_GET)
     .post(root_POST)
 
-// for all 'root/api/products/id' routes
+// for all 'root/api/categories/id' routes
 router
     .route('/:id')
     .get(rootID_GET)
