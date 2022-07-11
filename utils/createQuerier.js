@@ -204,10 +204,12 @@ const createQuerier = (model, modelNameSingular, includeList) => {
         addition of returning the actual database entry after
         updating
         */
-        const setter_updateRow = async (id, newData) => {
+        const setter_updateRow = async (id, newData, callback) => {
             const response = await model.update(newData, {
                 where: { id }
             });
+
+            if (callback) await callback(response);
       
             const savedData = await getter_getRow(id);
             return savedData;

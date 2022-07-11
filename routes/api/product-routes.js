@@ -13,6 +13,14 @@ const {
     deleteProduct
 } = querier.init();
 
+const createProductTag = async (product_id, tagIdList) => {
+    if (tagIdList) {
+        tagIdList = tagIdList.map(tag_id => ({ product_id, tag_id }));
+        console.log('tag ids: ', tagIdList);
+        await ProductTag.bulkCreate(tagIdList);
+    }
+};
+
 // traverse all categories
 const root_GET = async (req, res) => {
     try {
@@ -32,19 +40,11 @@ const root_GET = async (req, res) => {
 const root_POST = async (req, res) => {
     try {
 
-        let productTagList = req.body.tag_ids;
+        const productData = await createProduct(
+            req.body, 
+            async newProduct => await createProductTag(newProduct.id, req.body.tag_ids)
+        );
 
-        const productData = await createProduct(req.body, async newProduct => {
-            if (productTagList) {
-                productTagList = productTagList.map(tag_id => {
-                    return {
-                        product_id: newProduct.id,
-                        tag_id
-                    }
-                });
-                await ProductTag.bulkCreate(productTagList);
-            }
-        });
         res.status(200).json(productData);
 
     } catch (err) {
@@ -75,7 +75,12 @@ const rootID_GET = async (req, res) => {
 const rootID_PUT = async (req, res) => {
     try {
 
-        const productData = await updateProduct(req.params.id, req.body);
+        const productData = await updateProduct(
+            req.params.id, 
+            req.body, 
+            async () => await createProductTag(req.params.id, req.body.tag_ids)
+        );
+
         res.status(200).json(productData);
 
     } catch (err) {
