@@ -21,7 +21,7 @@ This application is distributed under the [MIT](https://opensource.org/licenses/
   ## About
 This application serves as a proof of concept for interacting with a back-end database using sequelize. This is not a deployed application but you can watch a demo of this app being used by clicking the video below:
 
-<a href="https://www.youtube.com/watch?v=rvZDNZV1kyY&t=2s&ab_channel=WilliamHorn"><img src="./package-assets/images/img-3.png"></a>
+<a href="https://www.youtube.com/watch?v=wsdBx1Bp2R8&ab_channel=WilliamHorn"><img src="./package-assets/images/img-3.png"></a>
 
 
   ## Contributors
