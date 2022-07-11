@@ -1,6 +1,6 @@
 
 const router = require('express').Router();
-const { Product, Category, Tag } = require('../../models');
+const { Product, Category, Tag, ProductTag } = require('../../models');
 const createQuerier = require('../../utils/createQuerier');
 
 const querier = createQuerier(Product, 'Product', [Category, Tag]);
@@ -32,7 +32,19 @@ const root_GET = async (req, res) => {
 const root_POST = async (req, res) => {
     try {
 
-        const productData = await createProduct(req.body);
+        let productTagList = req.body.tag_ids;
+
+        const productData = await createProduct(req.body, async newProduct => {
+            if (productTagList) {
+                productTagList = productTagList.map(tag_id => {
+                    return {
+                        product_id: newProduct.id,
+                        tag_id
+                    }
+                });
+                await ProductTag.bulkCreate(productTagList);
+            }
+        });
         res.status(200).json(productData);
 
     } catch (err) {

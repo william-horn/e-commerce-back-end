@@ -187,9 +187,11 @@ const createQuerier = (model, modelNameSingular, includeList) => {
         addition of returning the full database entry as a result
         instead of just the posted data
         */
-        const setter_setRow = async data => {
+        const setter_setRow = async (data, callback) => {
             const response = (await model.create(data))
                 .get({ plain: true});
+
+            if (callback) await callback(response);
       
             const savedData = await getter_getRow(response.id);
             return savedData;
